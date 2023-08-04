@@ -31,6 +31,7 @@ def register_user(request):
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON data'}, status=400)
 
+
         field_values = ['username', 'password1', 'password2', 'first_name', 'last_name', 'email']
         missing_fields = []
         for val in field_values:
@@ -41,6 +42,12 @@ def register_user(request):
             miss = ', '.join(missing_fields)
             return HttpResponse(f'Following are missing in request body: {miss}', status=400)
         # return HttpResponse('Testing')
+
+        for key,value in data.items():
+            if type(value)!=str:
+                return HttpResponse('Datatype of all fields should be string')
+        #return HttpResponse('Debug')
+
 
         username = data.get('username')
         password1 = data.get('password1')
@@ -103,6 +110,10 @@ def login_user(request):
         if len(missing_fields) > 0:
             miss = ', '.join(missing_fields)
             return HttpResponse(f'Following are missing in request body: {miss}', status=400)
+
+        for key, value in data.items():
+            if type(value) != str:
+                return HttpResponse('Datatype of all fields should be string')
 
         username = data.get('username')
         password = data.get('password')
